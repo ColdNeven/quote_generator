@@ -49,6 +49,15 @@ module.exports = {
     //! module and load
     module: {
         rules: [
+            //file loader
+            {
+                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                    },
+                ],
+            },
             //css loader
             {
                 test: /.css$/,
