@@ -12,7 +12,7 @@ const newQuoteBtn = document.getElementById('new-quote')
 const loader = document.getElementById('loader')
 
 //Show Loading
-
+quoteContainer.hidden = true;
 function loading(){
     loader.hidden = false;
     quoteContainer.hidden = true;
@@ -30,7 +30,7 @@ async  function  getQuote(){
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
     const apiURL = 'http://api.forismatic.com/api/1.0/?method=getQuote&lang=ru&format=json'
     try {
-        const response = await fetch(apiURL) //+ proxyURL
+        const response = await fetch(proxyUrl+apiURL) //+
         const data = await response.json()
         // if автор пустой = неизвестен
         if (data.quoteAuthor === ''){
