@@ -11,6 +11,8 @@ const twitterBtn = document.getElementById('twitter')
 const newQuoteBtn = document.getElementById('new-quote')
 const loader = document.getElementById('loader')
 
+let apiQuotes = []
+
 //Show Loading
 quoteContainer.hidden = true;
 function loading(){
@@ -24,46 +26,51 @@ function complete(){
         loader.hidden = true;
     }
 }
-//Get Quote From API
-async  function  getQuote(){
+
+function newQuote(){
+    //random
     loading()
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-    const apiURL = 'http://api.forismatic.com/api/1.0/?method=getQuote&lang=ru&format=json'
-    try {
-        const response = await fetch(proxyUrl+apiURL) //+
-        const data = await response.json()
-        // if автор пустой = неизвестен
-        if (data.quoteAuthor === ''){
-            authorText.innerText = 'Неизвестен'
-        }else{
-            authorText.innerText = data.quoteAuthor;
-        }
-        quoteText.innerText = data.quoteText;
-        if(data.quoteText.length>120){
-            quoteText.classList.add('long-quote')
-        }else{}
+    const quote = apiQuotes[Math.floor(Math.random()*apiQuotes.length)]
+    //check is 'unknow'
+    if(!quote.author){
+        authorText.textContent = 'Неизвестен'
+    } else {
+        authorText.textContent = quote.author
+    }
+    //Check Quote length to determine styling
+    if (quote.text.length > 100){
+        quoteText.classList.add('long-quote')
+    } else {
         quoteText.classList.remove('long-quote')
-        //stop Loader, Show
-        complete()
-
-    } catch (error){
-        getQuote()
-
+    }
+    //Hide, loader
+    quoteText.textContent = quote.text
+    complete()
+}
+async  function getQuotes(){
+    const apiUrl = 'https://type.fit/api/quotes'
+    try {
+        const response = await fetch(apiUrl);
+        apiQuotes = await response.json()
+        newQuote()
+    } catch(error){
+        console.alert('problem with server... https://vk.com/m_grey <- his problem')
     }
 }
+getQuotes();
 
-function tweetQuote(){
+ function tweetQuote(){
     const quote = quoteText.innerText
     const author = authorText.innerText
     const twitterUrl = `https://twitter.com/intent/tweet?text=${quote}-${author}`;
     window.open(twitterUrl, '_blank')
 }
 
-//Event Listener
-newQuoteBtn.addEventListener('click', getQuote);
-newQuoteBtn.addEventListener('touchend', getQuote);
+//!Event Listener
+newQuoteBtn.addEventListener('click', getQuotes);
+newQuoteBtn.addEventListener('touchend', getQuotes);
 twitterBtn.addEventListener('click', tweetQuote)
 twitterBtn.addEventListener('touchend', tweetQuote)
 
-//on Load
-getQuote()
+
+

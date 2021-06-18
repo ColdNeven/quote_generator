@@ -84,6 +84,12 @@ button:active{
     transform: translate(0, 0.3rem);
     box-shadow: 0 0.1rem rgba(255, 255, 255, 0.65)
 }
+.vk-button{
+    border: none;
+    border-radius: 10px;
+    color: lightskyblue;
+    background: #FFF;
+}
 .twitter-button:hover{
     color: #38a1f3;
 }
